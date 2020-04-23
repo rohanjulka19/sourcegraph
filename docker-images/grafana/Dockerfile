@@ -22,7 +22,7 @@ ENV PATH="/opt/jsonnet:${PATH}"
 
 RUN ./build.sh
 
-FROM grafana/grafana:6.7.1@sha256:1ff3999e0fc08a3909e9a3ecdf6e74b4789db9b67c8297c44fdee1e167b9375f as production
+FROM grafana/grafana:6.7.3@sha256:44e41d00685a13783555fa1e8efc2a5e5e70e1fa16db5523035cbedca8bd7eb7 as production
 
 ARG COMMIT_SHA="unknown"
 ARG DATE="unknown"
