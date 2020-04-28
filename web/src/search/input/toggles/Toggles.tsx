@@ -102,7 +102,6 @@ export const Toggles: React.FunctionComponent<TogglesProps> = (props: TogglesPro
 
     return (
         <div className={classNames('toggle-container', props.className)}>
-            <CopyQueryButton fullQuery={fullQuery} className="toggle-container__toggle" />
             <QueryInputToggle
                 {...props}
                 title="Case sensitivity"
@@ -134,6 +133,7 @@ export const Toggles: React.FunctionComponent<TogglesProps> = (props: TogglesPro
                     icon={CodeBracketsIcon}
                 />
             )}
+            <CopyQueryButton fullQuery={fullQuery} className="toggle-container__toggle" />
         </div>
     )
 }
