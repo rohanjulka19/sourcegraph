@@ -31,7 +31,7 @@ func TestSendUpload(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client := &bundleManagerClientImpl{bundleManagerURL: ts.URL}
+	client := newClient(ts.URL, nil)
 	err := client.SendUpload(context.Background(), 42, bytes.NewReader([]byte("payload\n")))
 	if err != nil {
 		t.Fatalf("unexpected error sending upload: %s", err)
@@ -44,7 +44,7 @@ func TestSendUploadBadResponse(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client := &bundleManagerClientImpl{bundleManagerURL: ts.URL}
+	client := newClient(ts.URL, nil)
 	err := client.SendUpload(context.Background(), 42, bytes.NewReader([]byte("payload\n")))
 	if err == nil {
 		t.Fatalf("unexpected nil error sending upload")
@@ -74,7 +74,7 @@ func TestGetUpload(t *testing.T) {
 	}
 	defer os.RemoveAll(tempDir)
 
-	client := &bundleManagerClientImpl{bundleManagerURL: ts.URL}
+	client := newClient(ts.URL, nil)
 	path, err := client.GetUpload(context.Background(), 42, tempDir)
 	if err != nil {
 		t.Fatalf("unexpected error sending db: %s", err)
@@ -100,7 +100,7 @@ func TestGetUploadBadResponse(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client := &bundleManagerClientImpl{bundleManagerURL: ts.URL}
+	client := newClient(ts.URL, nil)
 	_, err := client.GetUpload(context.Background(), 42, "")
 	if err == nil {
 		t.Fatalf("unexpected nil error sending db")
@@ -124,7 +124,7 @@ func TestSendDB(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client := &bundleManagerClientImpl{bundleManagerURL: ts.URL}
+	client := newClient(ts.URL, nil)
 	err := client.SendDB(context.Background(), 42, bytes.NewReader([]byte("payload\n")))
 	if err != nil {
 		t.Fatalf("unexpected error sending db: %s", err)
@@ -137,7 +137,7 @@ func TestSendDBBadResponse(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	client := &bundleManagerClientImpl{bundleManagerURL: ts.URL}
+	client := newClient(ts.URL, nil)
 	err := client.SendDB(context.Background(), 42, bytes.NewReader([]byte("payload\n")))
 	if err == nil {
 		t.Fatalf("unexpected nil error sending db")

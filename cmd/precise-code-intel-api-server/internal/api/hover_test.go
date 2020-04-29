@@ -13,7 +13,7 @@ import (
 
 func TestHover(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockDBGetDumpByID(t, mockDB, map[int]db.Dump{42: testDump1})
@@ -39,7 +39,7 @@ func TestHover(t *testing.T) {
 
 func TestHoverUnknownDump(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	setMockDBGetDumpByID(t, mockDB, nil)
 
 	api := New(mockDB, mockBundleManagerClient)
@@ -50,7 +50,7 @@ func TestHoverUnknownDump(t *testing.T) {
 
 func TestHoverRemoteDefinitionHoverText(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 
@@ -87,7 +87,7 @@ func TestHoverRemoteDefinitionHoverText(t *testing.T) {
 
 func TestHoverUnknownDefinition(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockDBGetDumpByID(t, mockDB, map[int]db.Dump{42: testDump1})

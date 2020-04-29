@@ -12,7 +12,7 @@ import (
 
 func TestLookupMoniker(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 
@@ -49,7 +49,7 @@ func TestLookupMoniker(t *testing.T) {
 
 func TestLookupMonikerNoPackageInformationID(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 
 	_, totalCount, err := lookupMoniker(mockDB, mockBundleManagerClient, 42, "sub/main.go", "definitions", testMoniker3, 10, 5)
 	if err != nil {
@@ -62,7 +62,7 @@ func TestLookupMonikerNoPackageInformationID(t *testing.T) {
 
 func TestLookupMonikerNoPackage(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockBundleManagerClientBundleClient(t, mockBundleManagerClient, map[int]bundles.BundleClient{42: mockBundleClient})

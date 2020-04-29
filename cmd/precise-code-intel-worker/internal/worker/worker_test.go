@@ -36,7 +36,7 @@ func TestProcess(t *testing.T) {
 	}
 
 	mockDB := dbmocks.NewMockDB()
-	bundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	bundleManagerClient := bundlemocks.NewMockClient()
 	gitserverClient := gitservermocks.NewMockClient()
 	jobHandle := dbmocks.NewMockJobHandle()
 
@@ -152,7 +152,7 @@ func TestProcessError(t *testing.T) {
 	}
 
 	mockDB := dbmocks.NewMockDB()
-	bundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	bundleManagerClient := bundlemocks.NewMockClient()
 	gitserverClient := gitservermocks.NewMockClient()
 	jobHandle := dbmocks.NewMockJobHandle()
 

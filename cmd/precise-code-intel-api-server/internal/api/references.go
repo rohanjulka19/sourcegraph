@@ -26,7 +26,7 @@ func (api *codeIntelAPI) References(ctx context.Context, repositoryID int, commi
 
 type ReferencePageResolver struct {
 	db                  db.DB
-	bundleManagerClient bundles.BundleManagerClient
+	bundleManagerClient bundles.Client
 	repositoryID        int
 	commit              string
 	remoteDumpLimit     int

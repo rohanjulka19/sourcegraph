@@ -13,7 +13,7 @@ import (
 
 func TestDefinitions(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockDBGetDumpByID(t, mockDB, map[int]db.Dump{42: testDump1})
@@ -42,7 +42,7 @@ func TestDefinitions(t *testing.T) {
 
 func TestDefinitionsUnknownDump(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	setMockDBGetDumpByID(t, mockDB, nil)
 
 	api := New(mockDB, mockBundleManagerClient)
@@ -53,7 +53,7 @@ func TestDefinitionsUnknownDump(t *testing.T) {
 
 func TestDefinitionViaSameDumpMoniker(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockDBGetDumpByID(t, mockDB, map[int]db.Dump{42: testDump1})
@@ -84,7 +84,7 @@ func TestDefinitionViaSameDumpMoniker(t *testing.T) {
 
 func TestDefinitionViaRemoteDumpMoniker(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 

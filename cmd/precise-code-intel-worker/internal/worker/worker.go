@@ -23,14 +23,14 @@ import (
 
 type WorkerOpts struct {
 	DB                  db.DB
-	BundleManagerClient bundles.BundleManagerClient
+	BundleManagerClient bundles.Client
 	GitserverClient     gitserver.Client
 	PollInterval        time.Duration
 }
 
 type Worker struct {
 	db                  db.DB
-	bundleManagerClient bundles.BundleManagerClient
+	bundleManagerClient bundles.Client
 	gitserverClient     gitserver.Client
 	pollInterval        time.Duration
 }
@@ -84,7 +84,7 @@ func (w *Worker) dequeueAndProcess() (_ bool, err error) {
 func process(
 	ctx context.Context,
 	db db.DB,
-	bundleManagerClient bundles.BundleManagerClient,
+	bundleManagerClient bundles.Client,
 	gitserverClient gitserver.Client,
 	upload db.Upload,
 	jobHandle db.JobHandle,

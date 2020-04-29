@@ -46,7 +46,7 @@ func TestSerializationRoundTrip(t *testing.T) {
 
 func TestDecodeOrCreateCursor(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockDBGetDumpByID(t, mockDB, map[int]db.Dump{42: testDump1})
@@ -71,7 +71,7 @@ func TestDecodeOrCreateCursor(t *testing.T) {
 
 func TestDecodeOrCreateCursorUnknownDump(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	setMockDBGetDumpByID(t, mockDB, nil)
 
 	if _, err := DecodeOrCreateCursor("sub1/main.go", 10, 20, 42, "", mockDB, mockBundleManagerClient); err != ErrMissingDump {
@@ -104,7 +104,7 @@ func TestDecodeOrCreateCursorExisting(t *testing.T) {
 	}
 
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 
 	if cursor, err := DecodeOrCreateCursor("", 0, 0, 0, EncodeCursor(expectedCursor), mockDB, mockBundleManagerClient); err != nil {
 		t.Fatalf("unexpected error decoding cursor: %s", err)

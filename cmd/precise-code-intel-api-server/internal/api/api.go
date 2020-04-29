@@ -29,14 +29,14 @@ type CodeIntelAPI interface {
 
 type codeIntelAPI struct {
 	db                  db.DB
-	bundleManagerClient bundles.BundleManagerClient
+	bundleManagerClient bundles.Client
 }
 
 var _ CodeIntelAPI = &codeIntelAPI{}
 
 var ErrMissingDump = errors.New("no dump")
 
-func New(db db.DB, bundleManagerClient bundles.BundleManagerClient) CodeIntelAPI {
+func New(db db.DB, bundleManagerClient bundles.Client) CodeIntelAPI {
 	return &codeIntelAPI{
 		db:                  db,
 		bundleManagerClient: bundleManagerClient,

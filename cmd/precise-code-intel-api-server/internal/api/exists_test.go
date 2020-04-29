@@ -13,7 +13,7 @@ import (
 
 func TestFindClosestDatabase(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 	mockBundleClient3 := bundlemocks.NewMockBundleClient()

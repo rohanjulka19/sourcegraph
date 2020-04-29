@@ -16,7 +16,7 @@ import (
 
 func TestHandleSameDumpCursor(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 
 	setMockDBGetDumpByID(t, mockDB, map[int]db.Dump{42: testDump1})
@@ -122,7 +122,7 @@ func TestHandleSameDumpCursor(t *testing.T) {
 
 func TestHandleDefinitionMonikersCursor(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 
@@ -233,7 +233,7 @@ func TestHandleDefinitionMonikersCursor(t *testing.T) {
 
 func TestHandleSameRepoCursor(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 	mockBundleClient3 := bundlemocks.NewMockBundleClient()
@@ -372,7 +372,7 @@ func TestHandleSameRepoCursor(t *testing.T) {
 
 func TestHandleSameRepoCursorMultipleDumpBatches(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 	mockReferencePager := mocks.NewMockReferencePager()
 
@@ -449,7 +449,7 @@ func TestHandleSameRepoCursorMultipleDumpBatches(t *testing.T) {
 
 func TestHandleRemoteRepoCursor(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient1 := bundlemocks.NewMockBundleClient()
 	mockBundleClient2 := bundlemocks.NewMockBundleClient()
 	mockBundleClient3 := bundlemocks.NewMockBundleClient()
@@ -577,7 +577,7 @@ func TestHandleRemoteRepoCursor(t *testing.T) {
 
 func TestHandleRemoteRepoCursorMultipleDumpBatches(t *testing.T) {
 	mockDB := dbmocks.NewMockDB()
-	mockBundleManagerClient := bundlemocks.NewMockBundleManagerClient()
+	mockBundleManagerClient := bundlemocks.NewMockClient()
 	mockBundleClient := bundlemocks.NewMockBundleClient()
 	mockReferencePager := mocks.NewMockReferencePager()
 

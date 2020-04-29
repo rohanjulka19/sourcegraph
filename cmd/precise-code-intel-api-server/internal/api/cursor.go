@@ -50,7 +50,7 @@ func decodeCursor(rawEncoded string) (Cursor, error) {
 
 // DecodeOrCreateCursor decodes and returns the raw cursor, or creates a new initial page cursor
 // if a raw cursor is not supplied.
-func DecodeOrCreateCursor(path string, line, character, uploadID int, rawCursor string, db db.DB, bundleManagerClient bundles.BundleManagerClient) (Cursor, error) {
+func DecodeOrCreateCursor(path string, line, character, uploadID int, rawCursor string, db db.DB, bundleManagerClient bundles.Client) (Cursor, error) {
 	if rawCursor != "" {
 		cursor, err := decodeCursor(rawCursor)
 		if err != nil {

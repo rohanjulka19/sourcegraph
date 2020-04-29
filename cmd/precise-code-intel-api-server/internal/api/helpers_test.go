@@ -139,7 +139,7 @@ func setMockReferencePagerPageFromOffset(t *testing.T, mockReferencePager *dbmoc
 	})
 }
 
-func setMockBundleManagerClientBundleClient(t *testing.T, mockBundleManagerClient *bundlemocks.MockBundleManagerClient, bundleClients map[int]bundles.BundleClient) {
+func setMockBundleManagerClientBundleClient(t *testing.T, mockBundleManagerClient *bundlemocks.MockClient, bundleClients map[int]bundles.BundleClient) {
 	mockBundleManagerClient.BundleClientFunc.SetDefaultHook(func(bundleID int) bundles.BundleClient {
 		bundleClient, ok := bundleClients[bundleID]
 		if !ok {

@@ -3,9 +3,6 @@ package client
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"net/http"
-	"net/url"
 )
 
 // BundleClient is the interface to the precise-code-intel-bundle-manager service scoped to a particular dump.
@@ -35,15 +32,15 @@ type BundleClient interface {
 }
 
 type bundleClientImpl struct {
-	bundleManagerURL string
-	bundleID         int
+	client   *clientImpl
+	bundleID int
 }
 
 var _ BundleClient = &bundleClientImpl{}
 
 // Exists determines if the given path exists in the dump.
 func (c *bundleClientImpl) Exists(ctx context.Context, path string) (exists bool, err error) {
-	err = c.request(ctx, "exists", map[string]interface{}{"path": path}, &exists)
+	err = c.client.queryBundle(ctx, c.bundleID, "exists", map[string]interface{}{"path": path}, &exists)
 	return exists, err
 }
 
@@ -55,8 +52,8 @@ func (c *bundleClientImpl) Definitions(ctx context.Context, path string, line, c
 		"character": character,
 	}
 
-	err = c.request(ctx, "definitions", args, &locations)
-	c.addBundleIDToLocations(locations)
+	err = c.client.queryBundle(ctx, c.bundleID, "definitions", args, &locations)
+	addBundleIDToLocations(locations, c.bundleID)
 	return locations, err
 }
 
@@ -68,8 +65,8 @@ func (c *bundleClientImpl) References(ctx context.Context, path string, line, ch
 		"character": character,
 	}
 
-	err = c.request(ctx, "references", args, &locations)
-	c.addBundleIDToLocations(locations)
+	err = c.client.queryBundle(ctx, c.bundleID, "references", args, &locations)
+	addBundleIDToLocations(locations, c.bundleID)
 	return locations, err
 }
 
@@ -82,7 +79,7 @@ func (c *bundleClientImpl) Hover(ctx context.Context, path string, line, charact
 	}
 
 	var target *json.RawMessage
-	if err := c.request(ctx, "hover", args, &target); err != nil {
+	if err := c.client.queryBundle(ctx, c.bundleID, "hover", args, &target); err != nil {
 		return "", Range{}, false, err
 	}
 
@@ -112,7 +109,7 @@ func (c *bundleClientImpl) MonikersByPosition(ctx context.Context, path string, 
 		"character": character,
 	}
 
-	err = c.request(ctx, "monikersByPosition", args, &target)
+	err = c.client.queryBundle(ctx, c.bundleID, "monikersByPosition", args, &target)
 	return target, err
 }
 
@@ -135,10 +132,10 @@ func (c *bundleClientImpl) MonikerResults(ctx context.Context, modelType, scheme
 		Count     int        `json:"count"`
 	}{}
 
-	err = c.request(ctx, "monikerResults", args, &target)
+	err = c.client.queryBundle(ctx, c.bundleID, "monikerResults", args, &target)
 	locations = target.Locations
 	count = target.Count
-	c.addBundleIDToLocations(locations)
+	addBundleIDToLocations(locations, c.bundleID)
 	return locations, count, err
 }
 
@@ -149,43 +146,12 @@ func (c *bundleClientImpl) PackageInformation(ctx context.Context, path, package
 		"packageInformationId": packageInformationID,
 	}
 
-	err = c.request(ctx, "packageInformation", args, &target)
+	err = c.client.queryBundle(ctx, c.bundleID, "packageInformation", args, &target)
 	return target, err
 }
 
-func (c *bundleClientImpl) request(ctx context.Context, path string, qs map[string]interface{}, target interface{}) error {
-	values := url.Values{}
-	for k, v := range qs {
-		values[k] = []string{fmt.Sprintf("%v", v)}
-	}
-
-	url, err := url.Parse(fmt.Sprintf("%s/dbs/%d/%s", c.bundleManagerURL, c.bundleID, path))
-	if err != nil {
-		return err
-	}
-	url.RawQuery = values.Encode()
-
-	req, err := http.NewRequest("GET", url.String(), nil)
-	if err != nil {
-		return err
-	}
-
-	// TODO - use context
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("unexpected status %d", resp.StatusCode)
-	}
-
-	return json.NewDecoder(resp.Body).Decode(&target)
-}
-
-func (c *bundleClientImpl) addBundleIDToLocations(locations []Location) {
+func addBundleIDToLocations(locations []Location, bundleID int) {
 	for i := range locations {
-		locations[i].DumpID = c.bundleID
+		locations[i].DumpID = bundleID
 	}
 }
