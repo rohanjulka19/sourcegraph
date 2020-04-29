@@ -6,6 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/inconshreveable/log15"
+	"github.com/opentracing/opentracing-go"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sourcegraph/sourcegraph/cmd/precise-code-intel-api-server/internal/janitor"
 	"github.com/sourcegraph/sourcegraph/cmd/precise-code-intel-api-server/internal/server"
 	bundles "github.com/sourcegraph/sourcegraph/internal/codeintel/bundles/client"
@@ -13,6 +16,7 @@ import (
 	"github.com/sourcegraph/sourcegraph/internal/conf"
 	"github.com/sourcegraph/sourcegraph/internal/debugserver"
 	"github.com/sourcegraph/sourcegraph/internal/env"
+	"github.com/sourcegraph/sourcegraph/internal/trace"
 	"github.com/sourcegraph/sourcegraph/internal/tracer"
 )
 
@@ -27,6 +31,23 @@ func main() {
 
 	db := mustInitializeDatabase()
 
+	bundleClientMetrics := bundles.NewClientMetrics("precise-code-intel-api-server")
+	for _, om := range []*bundles.OperationMetrics{
+		bundleClientMetrics.SendUpload,
+		bundleClientMetrics.GetUpload,
+		bundleClientMetrics.SendDB,
+		bundleClientMetrics.QueryBundle,
+	} {
+		om.MustRegister(prometheus.DefaultRegisterer)
+	}
+
+	bundleClient := bundles.NewObservedClient(
+		bundles.DefaultClient,
+		log15.Root(),
+		bundleClientMetrics,
+		trace.Tracer{Tracer: opentracing.GlobalTracer()},
+	)
+
 	host := ""
 	if env.InsecureDev {
 		host = "127.0.0.1"
@@ -36,7 +57,7 @@ func main() {
 		Host:                host,
 		Port:                3186,
 		DB:                  db,
-		BundleManagerClient: bundles.DefaultClient,
+		BundleManagerClient: bundleClient,
 	})
 
 	janitorInst := janitor.NewJanitor(janitor.JanitorOpts{

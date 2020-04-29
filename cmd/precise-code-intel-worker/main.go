@@ -6,6 +6,9 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/inconshreveable/log15"
+	"github.com/opentracing/opentracing-go"
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/sourcegraph/sourcegraph/cmd/precise-code-intel-worker/internal/worker"
 	bundles "github.com/sourcegraph/sourcegraph/internal/codeintel/bundles/client"
 	"github.com/sourcegraph/sourcegraph/internal/codeintel/db"
@@ -14,6 +17,7 @@ import (
 	"github.com/sourcegraph/sourcegraph/internal/debugserver"
 	"github.com/sourcegraph/sourcegraph/internal/env"
 	"github.com/sourcegraph/sourcegraph/internal/sqliteutil"
+	"github.com/sourcegraph/sourcegraph/internal/trace"
 	"github.com/sourcegraph/sourcegraph/internal/tracer"
 )
 
@@ -30,9 +34,26 @@ func main() {
 
 	db := mustInitializeDatabase()
 
+	bundleClientMetrics := bundles.NewClientMetrics("precise-code-intel-worker")
+	for _, om := range []*bundles.OperationMetrics{
+		bundleClientMetrics.SendUpload,
+		bundleClientMetrics.GetUpload,
+		bundleClientMetrics.SendDB,
+		bundleClientMetrics.QueryBundle,
+	} {
+		om.MustRegister(prometheus.DefaultRegisterer)
+	}
+
+	bundleClient := bundles.NewObservedClient(
+		bundles.DefaultClient,
+		log15.Root(),
+		bundleClientMetrics,
+		trace.Tracer{Tracer: opentracing.GlobalTracer()},
+	)
+
 	workerImpl := worker.New(worker.WorkerOpts{
 		DB:                  db,
-		BundleManagerClient: bundles.DefaultClient,
+		BundleManagerClient: bundleClient,
 		GitserverClient:     gitserver.DefaultClient,
 		PollInterval:        pollInterval,
 	})

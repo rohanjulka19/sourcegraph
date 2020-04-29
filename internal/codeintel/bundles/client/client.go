@@ -13,7 +13,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/neelance/parallel"
 	"github.com/opentracing-contrib/go-stdlib/nethttp"
-	"github.com/opentracing/opentracing-go"
 	"github.com/opentracing/opentracing-go/ext"
 	"github.com/sourcegraph/sourcegraph/internal/env"
 	"github.com/sourcegraph/sourcegraph/internal/httpcli"
@@ -53,6 +52,11 @@ type Client interface {
 	SendDB(ctx context.Context, bundleID int, r io.Reader) error
 }
 
+type ClientBase interface {
+	Client
+	QueryBundle(ctx context.Context, bundleID int, op string, qs map[string]interface{}, target interface{}) error
+}
+
 type clientImpl struct {
 	url         string
 	httpClient  httpcli.Doer
@@ -60,7 +64,7 @@ type clientImpl struct {
 	userAgent   string
 }
 
-var _ Client = &clientImpl{}
+var _ ClientBase = &clientImpl{}
 
 func newClient(url string, httpClient httpcli.Doer) *clientImpl {
 	if httpClient == nil {
@@ -77,30 +81,17 @@ func newClient(url string, httpClient httpcli.Doer) *clientImpl {
 
 // BundleClient creates a client that can answer intelligence queries for a single dump.
 func (c *clientImpl) BundleClient(bundleID int) BundleClient {
-	return &bundleClientImpl{
-		client:   c,
-		bundleID: bundleID,
-	}
+	return &bundleClientImpl{base: c, bundleID: bundleID}
 }
 
 // SendUpload transfers a raw LSIF upload to the bundle manager to be stored on disk.
 func (c *clientImpl) SendUpload(ctx context.Context, bundleID int, r io.Reader) (err error) {
-	span, ctx := ot.StartSpanFromContext(ctx, "client.SendUpload")
-	span.SetTag("bundleID", bundleID)
-	defer func() {
-		if err != nil {
-			ext.Error.Set(span, true)
-			span.SetTag("err", err.Error())
-		}
-		span.Finish()
-	}()
-
 	url, err := makeURL(c.url, fmt.Sprintf("uploads/%d", bundleID), nil)
 	if err != nil {
 		return err
 	}
 
-	body, err := c.do(ctx, span, "POST", url, r)
+	body, err := c.do(ctx, "POST", url, r)
 	if err != nil {
 		return err
 	}
@@ -111,22 +102,12 @@ func (c *clientImpl) SendUpload(ctx context.Context, bundleID int, r io.Reader) 
 // GetUploads retrieves a raw LSIF upload from disk. The file is written to a file in the
 // given directory with a random filename. The generated filename is returned on success.
 func (c *clientImpl) GetUpload(ctx context.Context, bundleID int, dir string) (_ string, err error) {
-	span, ctx := ot.StartSpanFromContext(ctx, "client.GetUpload")
-	span.SetTag("bundleID", bundleID)
-	defer func() {
-		if err != nil {
-			ext.Error.Set(span, true)
-			span.SetTag("err", err.Error())
-		}
-		span.Finish()
-	}()
-
 	url, err := makeURL(c.url, fmt.Sprintf("uploads/%d", bundleID), nil)
 	if err != nil {
 		return "", err
 	}
 
-	body, err := c.do(ctx, span, "GET", url, nil)
+	body, err := c.do(ctx, "GET", url, nil)
 	if err != nil {
 		return "", err
 	}
@@ -151,22 +132,12 @@ func (c *clientImpl) GetUpload(ctx context.Context, bundleID int, dir string) (_
 
 // SendDB transfers a converted database to the bundle manager to be stored on disk.
 func (c *clientImpl) SendDB(ctx context.Context, bundleID int, r io.Reader) (err error) {
-	span, ctx := ot.StartSpanFromContext(ctx, "client.SendDB")
-	span.SetTag("bundleID", bundleID)
-	defer func() {
-		if err != nil {
-			ext.Error.Set(span, true)
-			span.SetTag("err", err.Error())
-		}
-		span.Finish()
-	}()
-
 	url, err := makeURL(c.url, fmt.Sprintf("dbs/%d", bundleID), nil)
 	if err != nil {
 		return err
 	}
 
-	body, err := c.do(ctx, span, "POST", url, r)
+	body, err := c.do(ctx, "POST", url, r)
 	if err != nil {
 		return err
 	}
@@ -174,24 +145,13 @@ func (c *clientImpl) SendDB(ctx context.Context, bundleID int, r io.Reader) (err
 	return nil
 }
 
-func (c *clientImpl) queryBundle(ctx context.Context, bundleID int, op string, qs map[string]interface{}, target interface{}) (err error) {
-	span, ctx := ot.StartSpanFromContext(ctx, "client.queryBundle")
-	span.SetTag("op", op)
-	span.SetTag("bundleID", bundleID)
-	defer func() {
-		if err != nil {
-			ext.Error.Set(span, true)
-			span.SetTag("err", err.Error())
-		}
-		span.Finish()
-	}()
-
+func (c *clientImpl) QueryBundle(ctx context.Context, bundleID int, op string, qs map[string]interface{}, target interface{}) (err error) {
 	url, err := makeBundleURL(c.url, bundleID, op, qs)
 	if err != nil {
 		return err
 	}
 
-	body, err := c.do(ctx, span, "GET", url, nil)
+	body, err := c.do(ctx, "GET", url, nil)
 	if err != nil {
 		return err
 	}
@@ -200,7 +160,16 @@ func (c *clientImpl) queryBundle(ctx context.Context, bundleID int, op string, q
 	return json.NewDecoder(body).Decode(&target)
 }
 
-func (c *clientImpl) do(ctx context.Context, span opentracing.Span, method string, url *url.URL, body io.Reader) (_ io.ReadCloser, err error) {
+func (c *clientImpl) do(ctx context.Context, method string, url *url.URL, body io.Reader) (_ io.ReadCloser, err error) {
+	span, ctx := ot.StartSpanFromContext(ctx, "Client.do")
+	defer func() {
+		if err != nil {
+			ext.Error.Set(span, true)
+			span.SetTag("err", err.Error())
+		}
+		span.Finish()
+	}()
+
 	req, err := http.NewRequest(method, url.String(), body)
 	if err != nil {
 		return nil, err

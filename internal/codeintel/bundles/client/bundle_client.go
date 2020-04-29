@@ -32,7 +32,7 @@ type BundleClient interface {
 }
 
 type bundleClientImpl struct {
-	client   *clientImpl
+	base     ClientBase
 	bundleID int
 }
 
@@ -40,7 +40,7 @@ var _ BundleClient = &bundleClientImpl{}
 
 // Exists determines if the given path exists in the dump.
 func (c *bundleClientImpl) Exists(ctx context.Context, path string) (exists bool, err error) {
-	err = c.client.queryBundle(ctx, c.bundleID, "exists", map[string]interface{}{"path": path}, &exists)
+	err = c.base.QueryBundle(ctx, c.bundleID, "exists", map[string]interface{}{"path": path}, &exists)
 	return exists, err
 }
 
@@ -52,7 +52,7 @@ func (c *bundleClientImpl) Definitions(ctx context.Context, path string, line, c
 		"character": character,
 	}
 
-	err = c.client.queryBundle(ctx, c.bundleID, "definitions", args, &locations)
+	err = c.base.QueryBundle(ctx, c.bundleID, "definitions", args, &locations)
 	addBundleIDToLocations(locations, c.bundleID)
 	return locations, err
 }
@@ -65,7 +65,7 @@ func (c *bundleClientImpl) References(ctx context.Context, path string, line, ch
 		"character": character,
 	}
 
-	err = c.client.queryBundle(ctx, c.bundleID, "references", args, &locations)
+	err = c.base.QueryBundle(ctx, c.bundleID, "references", args, &locations)
 	addBundleIDToLocations(locations, c.bundleID)
 	return locations, err
 }
@@ -79,7 +79,7 @@ func (c *bundleClientImpl) Hover(ctx context.Context, path string, line, charact
 	}
 
 	var target *json.RawMessage
-	if err := c.client.queryBundle(ctx, c.bundleID, "hover", args, &target); err != nil {
+	if err := c.base.QueryBundle(ctx, c.bundleID, "hover", args, &target); err != nil {
 		return "", Range{}, false, err
 	}
 
@@ -109,7 +109,7 @@ func (c *bundleClientImpl) MonikersByPosition(ctx context.Context, path string, 
 		"character": character,
 	}
 
-	err = c.client.queryBundle(ctx, c.bundleID, "monikersByPosition", args, &target)
+	err = c.base.QueryBundle(ctx, c.bundleID, "monikersByPosition", args, &target)
 	return target, err
 }
 
@@ -132,7 +132,7 @@ func (c *bundleClientImpl) MonikerResults(ctx context.Context, modelType, scheme
 		Count     int        `json:"count"`
 	}{}
 
-	err = c.client.queryBundle(ctx, c.bundleID, "monikerResults", args, &target)
+	err = c.base.QueryBundle(ctx, c.bundleID, "monikerResults", args, &target)
 	locations = target.Locations
 	count = target.Count
 	addBundleIDToLocations(locations, c.bundleID)
@@ -146,7 +146,7 @@ func (c *bundleClientImpl) PackageInformation(ctx context.Context, path, package
 		"packageInformationId": packageInformationID,
 	}
 
-	err = c.client.queryBundle(ctx, c.bundleID, "packageInformation", args, &target)
+	err = c.base.QueryBundle(ctx, c.bundleID, "packageInformation", args, &target)
 	return target, err
 }
 
