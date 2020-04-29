@@ -211,6 +211,7 @@ func (c *clientImpl) do(ctx context.Context, span opentracing.Span, method strin
 	req = req.WithContext(ctx)
 
 	if c.httpLimiter != nil {
+		span.LogKV("event", "Waiting on HTTP limiter")
 		c.httpLimiter.Acquire()
 		defer c.httpLimiter.Release()
 		span.LogKV("event", "Acquired HTTP limiter")
