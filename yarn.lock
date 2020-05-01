@@ -1701,48 +1701,31 @@
   dependencies:
     prop-types "^15.6.1"
 
-"@reach/accordion@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.npmjs.org/@reach/accordion/-/accordion-0.9.1.tgz#c2a33a4eaabddd7216481e88d38b5be6b8a03bf1"
-  integrity sha512-zXSyTF7LJutWgnAPIb01w5bFdDObr0UlPtCErvo1pxUhY20NZAtzJAjsML5taCbNFkyJM97gIb84Yfr+BDajrg==
+"@reach/accordion@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.npmjs.org/@reach/accordion/-/accordion-0.10.1.tgz#bf99eae9b343a33ac5df020b9c56da7e907021b2"
+  integrity sha512-hhiLp08dhce4OsEtoLhXsqtIqZi6W4us2wHsuvQUgf6w7h1UIGtAMXl2/k4lzynwBtYSIY4fuqktzGgFGVwa4w==
   dependencies:
-    "@reach/auto-id" "^0.9.0"
-    "@reach/descendants" "^0.9.1"
-    "@reach/utils" "^0.9.0"
-    tslib "^1.10.0"
-    warning "^4.0.3"
+    "@reach/auto-id" "^0.10.1"
+    "@reach/descendants" "^0.10.1"
+    "@reach/utils" "^0.10.1"
+    tslib "^1.11.1"
 
-"@reach/auto-id@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.npmjs.org/@reach/auto-id/-/auto-id-0.10.0.tgz#72b70b9bb3f7d0f39b9fae0dcb412168ee139762"
-  integrity sha512-Uwsd4eNFa5YteZ7DKCVIbhE3c8x9DYVwtLy6ZCl1jo6bXAF6Di1dYm/XnkTmo+OYoKOZlVTu7umONDeezY33rQ==
+"@reach/auto-id@^0.10.0", "@reach/auto-id@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.npmjs.org/@reach/auto-id/-/auto-id-0.10.1.tgz#5c8f7573d6271e0e55df04e459a1d1d1cf11a216"
+  integrity sha512-xGFW2v+L39M/mafdW7v+NhhsjT1LBnQJCGj64dm37T4IGNgAexlfMkRRwsqHOvuVvV38mR114YOy0xrlkqduRQ==
   dependencies:
-    "@reach/utils" "^0.10.0"
-    tslib "^1.10.0"
+    "@reach/utils" "^0.10.1"
+    tslib "^1.11.1"
 
-"@reach/auto-id@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.npmjs.org/@reach/auto-id/-/auto-id-0.9.0.tgz#73b5d34bcf432f3e73b235b9dcaa89ea05a0d4db"
-  integrity sha512-9/aXl+dT0pOenvpkB2kkmQnpMDlmSk8ZkBYmYFzFz3eA4PZFNuXcHVzQevFRhc0HVlskPjxwPNf92EkI9rdFOw==
+"@reach/descendants@^0.10.0", "@reach/descendants@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.npmjs.org/@reach/descendants/-/descendants-0.10.1.tgz#e466a1ba52946ba5c809b4b4e7152d9b044b5437"
+  integrity sha512-Wh6VnCCDwqK/07GBx259fQsVGGwb+IT17GP3LYPtabo2L/t9Mw5oIiAkXZ6VVvw7zGpQGfm9cZYBxdYCbQOwuA==
   dependencies:
-    "@reach/utils" "^0.9.0"
-    tslib "^1.10.0"
-
-"@reach/descendants@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.npmjs.org/@reach/descendants/-/descendants-0.10.0.tgz#43eeba4aea10ffc62fe5144248c1455ab317964b"
-  integrity sha512-G7wm0poMVR+aT9W5O8C6cnrZBYskIAfgBfPwByOY7F6TwEj7HqHDs7tZ/3Paj6UIZZ9lkVfhHPEGGvfOpEXhlg==
-  dependencies:
-    "@reach/utils" "^0.10.0"
-    tslib "^1.10.0"
-
-"@reach/descendants@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.npmjs.org/@reach/descendants/-/descendants-0.9.1.tgz#f17eec0a245d3b6a7cccd020b8edf5b7d1115fc2"
-  integrity sha512-SIlCSzxmL7OVZVG6/9vICtawGZbpSOcEjxuUfZiVLs62QOSLINEUPgSnFKCOtGxIEQOEgNxQ/DMkpNkWEva2Tw==
-  dependencies:
-    "@reach/utils" "^0.9.0"
-    tslib "^1.10.0"
+    "@reach/utils" "^0.10.1"
+    tslib "^1.11.1"
 
 "@reach/menu-button@0.10.0":
   version "0.10.0"
@@ -1802,20 +1785,13 @@
     react-lifecycles-compat "^3.0.4"
     warning "^3.0.0"
 
-"@reach/utils@^0.10.0":
-  version "0.10.0"
-  resolved "https://registry.npmjs.org/@reach/utils/-/utils-0.10.0.tgz#480332433f9d0232aff2c36374cf9a2fe559990b"
-  integrity sha512-qPiwjw8jcT7JYrVT+ZO7bLTVEdp9KyvY0RO1emyCxqpYVr4s9oSZ3XG6n7G+bvnKeyjpbpIfCVfxYvPF1Uq2DQ==
+"@reach/utils@^0.10.0", "@reach/utils@^0.10.1":
+  version "0.10.1"
+  resolved "https://registry.npmjs.org/@reach/utils/-/utils-0.10.1.tgz#ee0283f81e161db4126a943b5c908a69f6a66d7e"
+  integrity sha512-YzwZWVK+rSiUATNVtK7H2/ZkT/GhNKmkRjnj3hnVhSYLGxY9uQdfc+npetOqkh4hTAOXiErDa64ybVClR3h0TA==
   dependencies:
-    tslib "^1.10.0"
-    warning "^4.0.3"
-
-"@reach/utils@^0.9.0":
-  version "0.9.0"
-  resolved "https://registry.npmjs.org/@reach/utils/-/utils-0.9.0.tgz#ee47c25c79eb2f98e6c0e728a2672075cc9991d5"
-  integrity sha512-cmiykRaxuCysVTsSY3PgrLjySnEIt1PLiSYKh5rAH8nYyEmaOCtw0vaNItFAiqQIjfrxkixmcUE8dyD8kqVuJA==
-  dependencies:
-    tslib "^1.10.0"
+    "@types/warning" "^3.0.0"
+    tslib "^1.11.1"
     warning "^4.0.3"
 
 "@sentry/browser@^5.15.4":
@@ -2015,8 +1991,7 @@
   integrity sha512-KWxkyphmlwam8kfYPSmoitKQRMGQCsr1ZRmNZgijT7ABKaVyk/+I5ezt2J213tM04Hi0vyg4L7iH1VCkNvm2Jw==
 
 "@sourcegraph/extension-api-types@link:packages/@sourcegraph/extension-api-types":
-  version "0.0.0"
-  uid ""
+  version "2.1.0"
 
 "@sourcegraph/prettierrc@^3.0.3":
   version "3.0.3"
@@ -3499,6 +3474,11 @@
   integrity sha512-2iYpNuOl98SrLPBZfEN9Mh2JCJ2EI9HU35SfgBEb51DcmaHkhp8cKMblYeBqMQiwXMgAD3W60DbQ4i/UdLiXhw==
   dependencies:
     "@types/node" "*"
+
+"@types/warning@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npmjs.org/@types/warning/-/warning-3.0.0.tgz#0d2501268ad8f9962b740d387c4654f5f8e23e52"
+  integrity sha1-DSUBJorY+ZYrdA04fEZU9fjiPlI=
 
 "@types/webpack-dev-server@3.10.1":
   version "3.10.1"
@@ -18735,8 +18715,7 @@ source-map@^0.7.3:
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
 "sourcegraph@link:packages/sourcegraph-extension-api":
-  version "0.0.0"
-  uid ""
+  version "24.0.0"
 
 space-separated-tokens@^1.0.0:
   version "1.1.2"
