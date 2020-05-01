@@ -2015,8 +2015,7 @@
   integrity sha512-KWxkyphmlwam8kfYPSmoitKQRMGQCsr1ZRmNZgijT7ABKaVyk/+I5ezt2J213tM04Hi0vyg4L7iH1VCkNvm2Jw==
 
 "@sourcegraph/extension-api-types@link:packages/@sourcegraph/extension-api-types":
-  version "0.0.0"
-  uid ""
+  version "2.1.0"
 
 "@sourcegraph/prettierrc@^3.0.3":
   version "3.0.3"
@@ -3246,10 +3245,10 @@
   resolved "https://registry.npmjs.org/@types/recharts-scale/-/recharts-scale-1.0.0.tgz#348c9220d6d9062c44a9d585d686644a97f7e25d"
   integrity sha512-HR/PrCcxYb2YHviTqH7CMdL1TUhUZLTUKzfrkMhxm1HTa5mg/QtP8XMiuSPz6dZ6wecazAOu8aYZ5DqkNlgHHQ==
 
-"@types/recharts@1.8.9":
-  version "1.8.9"
-  resolved "https://registry.npmjs.org/@types/recharts/-/recharts-1.8.9.tgz#2439f1138253500a1fadc1ae3534ce895a0dd0a3"
-  integrity sha512-J4sZYDfdbFf1aLzenOksdd2s8D/GWh8tftgaE3oMDkvgfOwba0d8DxP0hnE2+WzsSy4fSvHWqrKZv5r2hVH47A==
+"@types/recharts@1.8.10":
+  version "1.8.10"
+  resolved "https://registry.npmjs.org/@types/recharts/-/recharts-1.8.10.tgz#46bfc0450b1d38e84642b8b22a290359e454f7f6"
+  integrity sha512-XHVagR/eJFTTeYGygNuZIiMhNpwGjjf5+8clc6ST27sReecEZN7YTRWlZVvMyN0sJRIhABTLnhoIU+5Gts9+yQ==
   dependencies:
     "@types/d3-shape" "*"
     "@types/react" "*"
@@ -18735,8 +18734,7 @@ source-map@^0.7.3:
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
 "sourcegraph@link:packages/sourcegraph-extension-api":
-  version "0.0.0"
-  uid ""
+  version "24.0.0"
 
 space-separated-tokens@^1.0.0:
   version "1.1.2"
