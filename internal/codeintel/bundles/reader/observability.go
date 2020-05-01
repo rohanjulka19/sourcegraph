@@ -68,7 +68,7 @@ func NewObservedReader(reader Reader, logger logging.ErrorLogger, metrics Reader
 
 // ReadMeta calls into the inner Reader and registers the observed results.
 func (r *ObservedReader) ReadMeta(ctx context.Context) (_ string, _ string, _ int, err error) {
-	ctx, endObservation := r.prepObservation(ctx, &err, r.metrics.ReadMeta, "Reader.ReadMeta", "reader.read-meta")
+	ctx, endObservation := r.observe(ctx, &err, r.metrics.ReadMeta, "Reader.ReadMeta", "reader.read-meta")
 	defer endObservation(1)
 
 	return r.reader.ReadMeta(ctx)
@@ -76,7 +76,7 @@ func (r *ObservedReader) ReadMeta(ctx context.Context) (_ string, _ string, _ in
 
 // ReadDocument calls into the inner Reader and registers the observed results.
 func (r *ObservedReader) ReadDocument(ctx context.Context, path string) (_ types.DocumentData, _ bool, err error) {
-	ctx, endObservation := r.prepObservation(ctx, &err, r.metrics.ReadDocument, "Reader.ReadDocument", "reader.read-document")
+	ctx, endObservation := r.observe(ctx, &err, r.metrics.ReadDocument, "Reader.ReadDocument", "reader.read-document")
 	defer endObservation(1)
 
 	return r.reader.ReadDocument(ctx, path)
@@ -84,7 +84,7 @@ func (r *ObservedReader) ReadDocument(ctx context.Context, path string) (_ types
 
 // ReadResultChunk calls into the inner Reader and registers the observed results.
 func (r *ObservedReader) ReadResultChunk(ctx context.Context, id int) (_ types.ResultChunkData, _ bool, err error) {
-	ctx, endObservation := r.prepObservation(ctx, &err, r.metrics.ReadResultChunk, "Reader.ReadResultChunk", "reader.read-result-chunk")
+	ctx, endObservation := r.observe(ctx, &err, r.metrics.ReadResultChunk, "Reader.ReadResultChunk", "reader.read-result-chunk")
 	defer endObservation(1)
 
 	return r.reader.ReadResultChunk(ctx, id)
@@ -92,7 +92,7 @@ func (r *ObservedReader) ReadResultChunk(ctx context.Context, id int) (_ types.R
 
 // ReadDefinitions calls into the inner Reader and registers the observed results.
 func (r *ObservedReader) ReadDefinitions(ctx context.Context, scheme, identifier string, skip, take int) (definitions []types.DefinitionReferenceRow, _ int, err error) {
-	ctx, endObservation := r.prepObservation(ctx, &err, r.metrics.ReadDefinitions, "Reader.ReadDefinitions", "reader.read-definitions")
+	ctx, endObservation := r.observe(ctx, &err, r.metrics.ReadDefinitions, "Reader.ReadDefinitions", "reader.read-definitions")
 	defer func() {
 		endObservation(float64(len(definitions)))
 	}()
@@ -102,7 +102,7 @@ func (r *ObservedReader) ReadDefinitions(ctx context.Context, scheme, identifier
 
 // ReadReferences calls into the inner Reader and registers the observed results.
 func (r *ObservedReader) ReadReferences(ctx context.Context, scheme, identifier string, skip, take int) (references []types.DefinitionReferenceRow, _ int, err error) {
-	ctx, endObservation := r.prepObservation(ctx, &err, r.metrics.ReadReferences, "Reader.ReadReferences", "reader.read-references")
+	ctx, endObservation := r.observe(ctx, &err, r.metrics.ReadReferences, "Reader.ReadReferences", "reader.read-references")
 	defer func() {
 		endObservation(float64(len(references)))
 	}()
@@ -114,7 +114,7 @@ func (r *ObservedReader) Close() error {
 	return r.reader.Close()
 }
 
-func (r *ObservedReader) prepObservation(
+func (r *ObservedReader) observe(
 	ctx context.Context,
 	err *error,
 	metrics *metrics.OperationMetrics,

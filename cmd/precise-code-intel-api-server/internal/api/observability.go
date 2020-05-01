@@ -66,7 +66,7 @@ func NewObservedCodeIntelAPI(codeIntelAPI CodeIntelAPI, logger logging.ErrorLogg
 
 // FindClosestDumps calls into the inner CodeIntelAPI and registers the observed results.
 func (api *ObservedCodeIntelAPI) FindClosestDumps(ctx context.Context, repositoryID int, commit, file string) (dumps []db.Dump, err error) {
-	ctx, endObservation := api.prepObservation(ctx, &err, api.metrics.FindClosestDumps, "CodeIntelAPI.FindClosestDumps", "code-intel-api.find-closest-dumps")
+	ctx, endObservation := api.observe(ctx, &err, api.metrics.FindClosestDumps, "CodeIntelAPI.FindClosestDumps", "code-intel-api.find-closest-dumps")
 	defer func() {
 		endObservation(float64(len(dumps)))
 	}()
@@ -76,7 +76,7 @@ func (api *ObservedCodeIntelAPI) FindClosestDumps(ctx context.Context, repositor
 
 // Definitions calls into the inner CodeIntelAPI and registers the observed results.
 func (api *ObservedCodeIntelAPI) Definitions(ctx context.Context, file string, line, character, uploadID int) (definitions []ResolvedLocation, err error) {
-	ctx, endObservation := api.prepObservation(ctx, &err, api.metrics.Definitions, "CodeIntelAPI.Definitions", "code-intel-api.definitions")
+	ctx, endObservation := api.observe(ctx, &err, api.metrics.Definitions, "CodeIntelAPI.Definitions", "code-intel-api.definitions")
 	defer func() {
 		endObservation(float64(len(definitions)))
 	}()
@@ -86,7 +86,7 @@ func (api *ObservedCodeIntelAPI) Definitions(ctx context.Context, file string, l
 
 // References calls into the inner CodeIntelAPI and registers the observed results.
 func (api *ObservedCodeIntelAPI) References(ctx context.Context, repositoryID int, commit string, limit int, cursor Cursor) (references []ResolvedLocation, _ Cursor, _ bool, err error) {
-	ctx, endObservation := api.prepObservation(ctx, &err, api.metrics.References, "CodeIntelAPI.References", "code-intel-api.references")
+	ctx, endObservation := api.observe(ctx, &err, api.metrics.References, "CodeIntelAPI.References", "code-intel-api.references")
 	defer func() {
 		endObservation(float64(len(references)))
 	}()
@@ -96,13 +96,13 @@ func (api *ObservedCodeIntelAPI) References(ctx context.Context, repositoryID in
 
 // Hover calls into the inner CodeIntelAPI and registers the observed results.
 func (api *ObservedCodeIntelAPI) Hover(ctx context.Context, file string, line, character, uploadID int) (_ string, _ bundles.Range, _ bool, err error) {
-	ctx, endObservation := api.prepObservation(ctx, &err, api.metrics.Hover, "CodeIntelAPI.Hover", "code-intel-api.hover")
+	ctx, endObservation := api.observe(ctx, &err, api.metrics.Hover, "CodeIntelAPI.Hover", "code-intel-api.hover")
 	defer endObservation(1)
 
 	return api.codeIntelAPI.Hover(ctx, file, line, character, uploadID)
 }
 
-func (api *ObservedCodeIntelAPI) prepObservation(
+func (api *ObservedCodeIntelAPI) observe(
 	ctx context.Context,
 	err *error,
 	metrics *metrics.OperationMetrics,

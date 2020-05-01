@@ -79,7 +79,7 @@ func (db *ObservedDatabase) Close() error {
 
 // Exists calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) Exists(ctx context.Context, path string) (_ bool, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.Exists, "Database.Exists", "database.exists")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.Exists, "Database.Exists", "database.exists")
 	defer endObservation(1)
 
 	return db.database.Exists(ctx, path)
@@ -87,7 +87,7 @@ func (db *ObservedDatabase) Exists(ctx context.Context, path string) (_ bool, er
 
 // Definitions calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) Definitions(ctx context.Context, path string, line, character int) (definitions []Location, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.Definitions, "Database.Definitions", "database.definitions")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.Definitions, "Database.Definitions", "database.definitions")
 	defer func() {
 		endObservation(float64(len(definitions)))
 	}()
@@ -97,7 +97,7 @@ func (db *ObservedDatabase) Definitions(ctx context.Context, path string, line, 
 
 // References calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) References(ctx context.Context, path string, line, character int) (references []Location, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.References, "Database.References", "database.references")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.References, "Database.References", "database.references")
 	defer func() {
 		endObservation(float64(len(references)))
 	}()
@@ -107,7 +107,7 @@ func (db *ObservedDatabase) References(ctx context.Context, path string, line, c
 
 // Hover calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) Hover(ctx context.Context, path string, line, character int) (_ string, _ Range, _ bool, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.Hover, "Database.Hover", "database.hover")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.Hover, "Database.Hover", "database.hover")
 	defer endObservation(1)
 
 	return db.database.Hover(ctx, path, line, character)
@@ -115,7 +115,7 @@ func (db *ObservedDatabase) Hover(ctx context.Context, path string, line, charac
 
 // MonikersByPosition calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) MonikersByPosition(ctx context.Context, path string, line, character int) (monikers [][]types.MonikerData, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.MonikersByPosition, "Database.MonikersByPosition", "database.monikers-by-position")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.MonikersByPosition, "Database.MonikersByPosition", "database.monikers-by-position")
 	defer func() {
 		count := 0
 		for _, group := range monikers {
@@ -130,7 +130,7 @@ func (db *ObservedDatabase) MonikersByPosition(ctx context.Context, path string,
 
 // MonikerResults calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) MonikerResults(ctx context.Context, tableName, scheme, identifier string, skip, take int) (locations []Location, _ int, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.MonikerResults, "Database.MonikerResults", "database.moniker-results")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.MonikerResults, "Database.MonikerResults", "database.moniker-results")
 	defer func() {
 		endObservation(float64(len(locations)))
 	}()
@@ -140,13 +140,13 @@ func (db *ObservedDatabase) MonikerResults(ctx context.Context, tableName, schem
 
 // PackageInformation calls into the inner Database and registers the observed results.
 func (db *ObservedDatabase) PackageInformation(ctx context.Context, path string, packageInformationID types.ID) (_ types.PackageInformationData, _ bool, err error) {
-	ctx, endObservation := db.prepObservation(ctx, &err, db.metrics.PackageInformation, "Database.PackageInformation", "database.package-information")
+	ctx, endObservation := db.observe(ctx, &err, db.metrics.PackageInformation, "Database.PackageInformation", "database.package-information")
 	defer endObservation(1)
 
 	return db.database.PackageInformation(ctx, path, packageInformationID)
 }
 
-func (db *ObservedDatabase) prepObservation(
+func (db *ObservedDatabase) observe(
 	ctx context.Context,
 	err *error,
 	metrics *metrics.OperationMetrics,
