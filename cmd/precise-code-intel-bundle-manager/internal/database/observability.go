@@ -74,7 +74,6 @@ func NewObservedDatabase(database Database, logger logging.ErrorLogger, metrics 
 
 // Close calls into the inner Database.
 func (db *ObservedDatabase) Close() error {
-	// TODO - trace
 	return db.database.Close()
 }
 
